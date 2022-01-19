@@ -1515,8 +1515,6 @@
 
                 '----------------------------------------------------------------------------------
                 If Array_Line(0) = "ID de trabajo" And Array_Line.GetLength(0) = 213 Then
-                    'Limit date inside file
-
                     Do
                         CurrentLine = Input.ReadLine()
                         If CurrentLine Is Nothing Then
@@ -1921,9 +1919,7 @@
     End Sub
 
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'DataRange.Show()
-        DataRange.Visible = True
-        DataRange.TopMost = True
+
     End Sub
 
     Public MoveForm As Boolean

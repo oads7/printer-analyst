@@ -65,6 +65,12 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRange.Designer.vb">
+      <DependentUpon>DataRange.vb</DependentUpon>
+    </Compile>
+    <Compile Include="DataRange.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Main.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DataRange.resx">
+      <DependentUpon>DataRange.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.vb</DependentUpon>
     </EmbeddedResource>

@@ -1,6 +1,5 @@
 ﻿Module Module_Lib
 
-
     Public Function ParseLine(Line As String) As String()
         Dim Array(-1) As String
         Dim Size As Integer = Line.Length()

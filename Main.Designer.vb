@@ -449,7 +449,7 @@ Partial Class Main
         Me.AnalizarContextMenu.Name = "AnalizarContextMenu"
         Me.AnalizarContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.AnalizarContextMenu.ShowImageMargin = False
-        Me.AnalizarContextMenu.Size = New System.Drawing.Size(192, 48)
+        Me.AnalizarContextMenu.Size = New System.Drawing.Size(192, 26)
         '
         'AnalisisSharpToolStripMenuItem
         '
@@ -496,7 +496,7 @@ Partial Class Main
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Name = "Main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Form1"
+        Me.Text = "Printer Analyst"
         Me.AnalizarContextMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()

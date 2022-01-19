@@ -9,3 +9,4 @@ C:\Users\Alejandro\Desktop\Printer Analyst\obj\Debug\Printer Analyst.exe
 C:\Users\Alejandro\Desktop\Printer Analyst\obj\Debug\Printer Analyst.xml
 C:\Users\Alejandro\Desktop\Printer Analyst\obj\Debug\Printer Analyst.pdb
 C:\Users\Alejandro\Desktop\Printer Analyst\obj\Debug\Printer_Analyst.Main.resources
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Debug\Printer_Analyst.DataRange.resources
