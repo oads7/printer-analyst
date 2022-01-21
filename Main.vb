@@ -101,6 +101,7 @@
                             Dim n As Integer
 
                             n = Convert.ToInt32(Grid(4, UPos))
+                            n += Convert.ToInt32(Array_Line(416))
                             For z As Integer = 12 To 36
                                 'n += Convert.ToInt32(Array_Line(z))
                             Next
@@ -1465,6 +1466,18 @@
             Exit Sub
         End If
 
+        'Show form and get data range for analysis
+        DataRange.Visible = True
+        DataRange.TopMost = True
+
+        While DataRange.Visible = True
+            Threading.Thread.Sleep(100)
+            Application.DoEvents()
+        End While
+
+        Dim Date_Start As Date = DataRange.DateStart.Value
+        Dim Date_End As Date = DataRange.DateEnd.Value
+
         Dim Grid(8, 5) As String
 
         'Initialize Head
@@ -1529,6 +1542,35 @@
                         CurrentLine = CurrentLine.Replace("#", Chr(34).ToString)
 
                         Array_Line = ParseLine(CurrentLine)
+
+                        'Get username and check
+                        If DataRange.User.Text <> "" Then
+                            If DataRange.User.Text <> Array_Line(4) Then
+                                Continue Do
+                            End If
+                        End If
+
+                        'Get transaction date
+                        Dim Transaction_Date As Date
+                        Array_Line(10) = Array_Line(10).Replace("T", " ")
+
+                        Try
+                            Transaction_Date = DateTime.ParseExact(Array_Line(10), "yyyy-MM-dd HH:mm:ss", Nothing)
+                        Catch
+                            Continue Do
+                        End Try
+
+                        Dim Range_Start As Date = DataRange.DateStart.Value
+                        Dim Range_End As Date = DataRange.DateEnd.Value
+
+                        If Transaction_Date.Ticks < Range_Start.Ticks Or Transaction_Date.Ticks > Range_End.Ticks Then
+                            Continue Do
+                        End If
+
+                        'Skip NG returns
+                        'If Array_Line(172) <> "OK" Then
+                        'Continue Do
+                        'End If
 
                         'Registering Data
                         Dim Transaction As String = Array_Line(2)
@@ -1708,10 +1750,11 @@
                                 n += Convert.ToInt32(Array_Line(170)) - Convert.ToInt32(Array_Line(171))
                                 Grid(8, 5) = n.ToString()
                             End If
-                        ElseIf Transaction = "Impresión Directa(Memoria USB)" Or
-                                   Transaction = "Imprimir" Or
-                                   Transaction = "Imprimir lista" Or
-                                   Transaction = "Lista de Impres." Then
+                        ElseIf Transaction = "Imprimir" Then
+                            'ElseIf Transaction = "Impresión Directa(Memoria USB)" Or
+                            'Transaction = "Imprimir" Or
+                            'Transaction = "Imprimir lista" Or
+                            'Transaction = "Lista de Impres." Then
                             '------------------------------
                             'Print Full Color
                             '------------------------------
@@ -1920,11 +1963,6 @@
         End If
     End Sub
 
-    Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'DataRange.Show()
-        DataRange.Visible = True
-        DataRange.TopMost = True
-    End Sub
 
     Public MoveForm As Boolean
     Public MoveForm_MousePosition As Point

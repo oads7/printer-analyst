@@ -26,10 +26,12 @@ Partial Class DataRange
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.Inicio = New System.Windows.Forms.DateTimePicker()
+        Me.DateStart = New System.Windows.Forms.DateTimePicker()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Aceptar = New System.Windows.Forms.Button()
-        Me.Fin = New System.Windows.Forms.DateTimePicker()
+        Me.DateEnd = New System.Windows.Forms.DateTimePicker()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.User = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'WClose
@@ -56,9 +58,9 @@ Partial Class DataRange
         Me.Label2.ForeColor = System.Drawing.Color.White
         Me.Label2.Location = New System.Drawing.Point(30, 40)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(259, 30)
+        Me.Label2.Size = New System.Drawing.Size(358, 30)
         Me.Label2.TabIndex = 14
-        Me.Label2.Text = "Define un rango de fecha"
+        Me.Label2.Text = "Define un rango de fecha y usuario"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label1
@@ -85,13 +87,13 @@ Partial Class DataRange
         Me.Label3.Text = "Fin"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Inicio
+        'DateStart
         '
-        Me.Inicio.Font = New System.Drawing.Font("Segoe UI", 11.0!)
-        Me.Inicio.Location = New System.Drawing.Point(130, 95)
-        Me.Inicio.Name = "Inicio"
-        Me.Inicio.Size = New System.Drawing.Size(250, 27)
-        Me.Inicio.TabIndex = 17
+        Me.DateStart.Font = New System.Drawing.Font("Segoe UI", 11.0!)
+        Me.DateStart.Location = New System.Drawing.Point(130, 95)
+        Me.DateStart.Name = "DateStart"
+        Me.DateStart.Size = New System.Drawing.Size(250, 27)
+        Me.DateStart.TabIndex = 17
         '
         'Label4
         '
@@ -100,7 +102,7 @@ Partial Class DataRange
         Me.Label4.ForeColor = System.Drawing.Color.White
         Me.Label4.Location = New System.Drawing.Point(1, 1)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(398, 228)
+        Me.Label4.Size = New System.Drawing.Size(398, 258)
         Me.Label4.TabIndex = 19
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -114,32 +116,56 @@ Partial Class DataRange
         Me.Aceptar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Aceptar.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Aceptar.ForeColor = System.Drawing.Color.White
-        Me.Aceptar.Location = New System.Drawing.Point(280, 180)
+        Me.Aceptar.Location = New System.Drawing.Point(280, 220)
         Me.Aceptar.Name = "Aceptar"
         Me.Aceptar.Size = New System.Drawing.Size(100, 30)
         Me.Aceptar.TabIndex = 20
         Me.Aceptar.Text = "Aceptar"
         Me.Aceptar.UseVisualStyleBackColor = False
         '
-        'Fin
+        'DateEnd
         '
-        Me.Fin.Font = New System.Drawing.Font("Segoe UI", 11.0!)
-        Me.Fin.Location = New System.Drawing.Point(130, 135)
-        Me.Fin.Name = "Fin"
-        Me.Fin.Size = New System.Drawing.Size(250, 27)
-        Me.Fin.TabIndex = 21
+        Me.DateEnd.Font = New System.Drawing.Font("Segoe UI", 11.0!)
+        Me.DateEnd.Location = New System.Drawing.Point(130, 135)
+        Me.DateEnd.Name = "DateEnd"
+        Me.DateEnd.Size = New System.Drawing.Size(250, 27)
+        Me.DateEnd.TabIndex = 21
+        '
+        'Label5
+        '
+        Me.Label5.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(112, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.Color.White
+        Me.Label5.Location = New System.Drawing.Point(100, 175)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(70, 30)
+        Me.Label5.TabIndex = 22
+        Me.Label5.Text = "Usuario"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'User
+        '
+        Me.User.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.User.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.User.Location = New System.Drawing.Point(180, 180)
+        Me.User.MaxLength = 64
+        Me.User.Name = "User"
+        Me.User.Size = New System.Drawing.Size(200, 25)
+        Me.User.TabIndex = 77
         '
         'DataRange
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(400, 230)
-        Me.Controls.Add(Me.Fin)
+        Me.ClientSize = New System.Drawing.Size(400, 260)
+        Me.Controls.Add(Me.User)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.DateEnd)
         Me.Controls.Add(Me.Aceptar)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Inicio)
+        Me.Controls.Add(Me.DateStart)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.WClose)
         Me.Controls.Add(Me.Label4)
@@ -148,6 +174,7 @@ Partial Class DataRange
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DataRange"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -155,8 +182,10 @@ Partial Class DataRange
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents Label3 As Label
-    Friend WithEvents Inicio As DateTimePicker
+    Friend WithEvents DateStart As DateTimePicker
     Friend WithEvents Label4 As Label
     Friend WithEvents Aceptar As Button
-    Friend WithEvents Fin As DateTimePicker
+    Friend WithEvents DateEnd As DateTimePicker
+    Friend WithEvents Label5 As Label
+    Friend WithEvents User As TextBox
 End Class

@@ -1465,6 +1465,18 @@
             Exit Sub
         End If
 
+        'Show form and get data range for analysis
+        DataRange.Visible = True
+        DataRange.TopMost = True
+
+        While DataRange.Visible = True
+            Threading.Thread.Sleep(100)
+            Application.DoEvents()
+        End While
+
+        Dim Date_Start As Date = DataRange.DateStart.Value
+        Dim Date_End As Date = DataRange.DateEnd.Value
+
         Dim Grid(8, 5) As String
 
         'Initialize Head
@@ -1515,6 +1527,8 @@
 
                 '----------------------------------------------------------------------------------
                 If Array_Line(0) = "ID de trabajo" And Array_Line.GetLength(0) = 213 Then
+                    'Limit date inside file
+
                     Do
                         CurrentLine = Input.ReadLine()
                         If CurrentLine Is Nothing Then
@@ -1527,6 +1541,30 @@
                         CurrentLine = CurrentLine.Replace("#", Chr(34).ToString)
 
                         Array_Line = ParseLine(CurrentLine)
+
+                        'Get username and check
+                        If DataRange.User.Text <> "" Then
+                            If DataRange.User.Text <> Array_Line(4) Then
+                                Continue Do
+                            End If
+                        End If
+
+                        'Get transaction date
+                        Dim Transaction_Date As Date
+                        Array_Line(10) = Array_Line(10).Replace("T", " ")
+
+                        Try
+                            Transaction_Date = DateTime.ParseExact(Array_Line(10), "yyyy-MM-dd HH:mm:ss", Nothing)
+                        Catch
+                            Continue Do
+                        End Try
+
+                        Dim Range_Start As Date = DataRange.DateStart.Value
+                        Dim Range_End As Date = DataRange.DateEnd.Value
+
+                        If Transaction_Date.Ticks < Range_Start.Ticks Or Transaction_Date.Ticks > Range_End.Ticks Then
+                            Continue Do
+                        End If
 
                         'Registering Data
                         Dim Transaction As String = Array_Line(2)
@@ -1918,9 +1956,6 @@
         End If
     End Sub
 
-    Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
 
     Public MoveForm As Boolean
     Public MoveForm_MousePosition As Point
