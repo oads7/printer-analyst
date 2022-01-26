@@ -1478,7 +1478,7 @@
         Dim Date_Start As Date = DataRange.DateStart.Value
         Dim Date_End As Date = DataRange.DateEnd.Value
 
-        Dim Grid(8, 5) As String
+        Dim Grid(6, 4) As String
 
         'Initialize Head
         Grid(0, 0) = "Modo/Tamaño"
@@ -1486,7 +1486,6 @@
         Grid(0, 2) = "Copia B/N"
         Grid(0, 3) = "Impresion Color"
         Grid(0, 4) = "Impresion B/N"
-        Grid(0, 5) = "Escaner"
 
         Grid(1, 0) = "A3"
         Grid(2, 0) = "A4"
@@ -1494,13 +1493,6 @@
         Grid(4, 0) = "Carta"
         Grid(5, 0) = "Oficio"
         Grid(6, 0) = "Pliego"
-
-        Grid(7, 0) = "Copias Generadas"
-        Grid(7, 2) = "Impresiones Generadas"
-        Grid(7, 4) = "Escaneos Generados"
-        Grid(8, 0) = "Copias No Generadas"
-        Grid(8, 2) = "Impresiones No Generadas"
-        Grid(8, 4) = "Escaneos No Generados"
 
         'Initialize Grid
         For i As Integer = 1 To 6
@@ -1560,17 +1552,18 @@
                             Continue Do
                         End Try
 
-                        Dim Range_Start As Date = DataRange.DateStart.Value
-                        Dim Range_End As Date = DataRange.DateEnd.Value
+                        Dim Range_Start As Date = DataRange.DateStart.Value.Date
+                        Dim Range_End As Date = DataRange.DateEnd.Value.Date
+                        Range_End = Range_End.AddDays(1)
 
                         If Transaction_Date.Ticks < Range_Start.Ticks Or Transaction_Date.Ticks > Range_End.Ticks Then
                             Continue Do
                         End If
 
                         'Skip NG returns
-                        'If Array_Line(172) <> "OK" Then
-                        'Continue Do
-                        'End If
+                        If Array_Line(172) <> "OK" And Array_Line(172) <> "Env. correc." Then
+                            Continue Do
+                        End If
 
                         'Registering Data
                         Dim Transaction As String = Array_Line(2)
@@ -1688,73 +1681,10 @@
                                 n += Convert.ToInt32(Array_Line(44))
                                 Grid(6, 2) = n.ToString()
                             End If
-
-                            If Array_Line(168) <> "N/A" And Array_Line(169) <> "N/A" And Array_Line(170) <> "N/A" Then
-                                Dim n As Integer
-
-                                'Copias Generadas
-                                n = Convert.ToInt32(Grid(7, 1))
-                                n += Convert.ToInt32(Array_Line(170)) * Convert.ToInt32(Array_Line(169))
-                                Grid(7, 1) = n.ToString()
-
-                                'Copias No Generadas (170-171)
-                                n = Convert.ToInt32(Grid(8, 1))
-                                n += Convert.ToInt32(Array_Line(12)) -
-                                    (Convert.ToInt32(Array_Line(170)) * Convert.ToInt32(Array_Line(169)))
-                                'n += Convert.ToInt32(Array_Line(170)) *
-                                '    (Convert.ToInt32(Array_Line(168)) - Convert.ToInt32(Array_Line(169)))
-                                Grid(8, 1) = n.ToString()
-                            End If
-
-
-
-
-
-
-
-                            'Dim x As Integer
-                            'x = Convert.ToInt32(Array_Line(20))
-                            'x += Convert.ToInt32(Array_Line(24))
-                            'x += Convert.ToInt32(Array_Line(32))
-                            'x += Convert.ToInt32(Array_Line(52))
-                            'x += Convert.ToInt32(Array_Line(48))
-                            'x += Convert.ToInt32(Array_Line(44))
-
-                            'Dim z As Integer
-                            'z = Convert.ToInt32(Array_Line(170)) * Convert.ToInt32(Array_Line(169))
-                            'z += Convert.ToInt32(Array_Line(170)) *
-                            '(Convert.ToInt32(Array_Line(168)) - Convert.ToInt32(Array_Line(169)))
-
-                            'If x <> z Then
-                            '    MsgBox(Array_Line(0) + ", " + Transaction + "... l=" + (l + 2).ToString + ", x=" + x.ToString + ", z=" + z.ToString)
-                            'End If
-
-
-
-                        ElseIf Transaction = "Escanear a disco duro" Or
-                                   Transaction = "Escaneo a Carpeta de Red" Or
-                                   Transaction = "Envío de Fax" Then
-                            '------------------------------
-                            'Scan
-                            '------------------------------
-                            If Array_Line(170) <> "N/A" And Array_Line(171) <> "N/A" Then
-                                Dim n As Integer
-
-                                'Copias Generadas
-                                n = Convert.ToInt32(Grid(7, 5))
-                                n += Convert.ToInt32(Array_Line(171))
-                                Grid(7, 5) = n.ToString()
-
-                                'Copias No Generadas (170-171)
-                                n = Convert.ToInt32(Grid(8, 5))
-                                n += Convert.ToInt32(Array_Line(170)) - Convert.ToInt32(Array_Line(171))
-                                Grid(8, 5) = n.ToString()
-                            End If
-                        ElseIf Transaction = "Imprimir" Then
-                            'ElseIf Transaction = "Impresión Directa(Memoria USB)" Or
-                            'Transaction = "Imprimir" Or
-                            'Transaction = "Imprimir lista" Or
-                            'Transaction = "Lista de Impres." Then
+                        ElseIf Transaction = "Impresión Directa(Memoria USB)" Or
+                            Transaction = "Imprimir" Or
+                            Transaction = "Imprimir lista" Or
+                            Transaction = "Lista de Impres." Then
                             '------------------------------
                             'Print Full Color
                             '------------------------------
@@ -1869,39 +1799,10 @@
                                 Grid(6, 4) = n.ToString()
                             End If
 
-                            If Array_Line(168) <> "N/A" And Array_Line(169) <> "N/A" And Array_Line(170) <> "N/A" Then
-                                Dim n As Integer
-
-                                'Impresiones Generadas
-                                n = Convert.ToInt32(Grid(7, 3))
-                                n += Convert.ToInt32(Array_Line(170)) * Convert.ToInt32(Array_Line(169))
-                                Grid(7, 3) = n.ToString()
-
-                                'Impresiones No Generadas
-                                n = Convert.ToInt32(Grid(8, 3))
-                                n += Convert.ToInt32(Array_Line(12)) -
-                                    (Convert.ToInt32(Array_Line(170)) * Convert.ToInt32(Array_Line(169)))
-                                'n += Convert.ToInt32(Array_Line(170)) *
-                                '    (Convert.ToInt32(Array_Line(168)) - Convert.ToInt32(Array_Line(169)))
-                                Grid(8, 3) = n.ToString()
-                            End If
-
-
-
-
-
 
                         End If
 
                         l += 1
-
-
-
-
-
-
-
-
 
 
                     Loop
@@ -1931,26 +1832,13 @@
 
                         Output.Close()
                     Catch ex As Exception
-                        MsgBox("#Este archivo lo esta utilizando otro programa. Por favor escoja otro nombre.")
+                        'MsgBox("Este archivo lo esta utilizando otro programa. Por favor escoja otro nombre.")
+                        MsgBox(ex.Message)
                     End Try
-
-
-
-
-
                 End If
-
-
             End If
 
-
-
             Input.Close()
-
-
-
-
-
         Catch ex As Exception
             'MsgBox("Este archivo lo esta utilizando otro programa. Por favor escoja otro nombre.")
             MsgBox(ex.Message)
@@ -1982,5 +1870,831 @@
 
     Private Sub Main_MouseUp(sender As Object, e As MouseEventArgs) Handles Me.MouseUp
         If e.Button = MouseButtons.Left Then MoveForm = False
+    End Sub
+
+    Private Sub AnálisisMultipleColumnaUnicaToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AnálisisMultipleColumnaUnicaToolStripMenuItem.Click
+        Dim Grid(11, 0) As String
+
+        'Initialize Head
+        Grid(0, 0) = "Location"
+        Grid(1, 0) = "Serial"
+        Grid(2, 0) = "User"
+        Grid(3, 0) = "User ID"
+
+        Grid(4, 0) = "Copy Full Color Single"
+        Grid(5, 0) = "Copy Full Color Duplex"
+        Grid(6, 0) = "Copy Black Single"
+        Grid(7, 0) = "Copy Black Duplex"
+        Grid(8, 0) = "Printer Full Color Single"
+        Grid(9, 0) = "Printer Full Color Duplex"
+        Grid(10, 0) = "Printer Black Single"
+        Grid(11, 0) = "Printer Black Duplex"
+
+        'Get file list
+        If Path = "" Then
+            MsgBox("Por favor, escoje una ruta.")
+            Exit Sub
+        End If
+
+        Dim List_Files As String() = IO.Directory.GetFiles(Path, "*.csv")
+
+        'Start progress bar
+        Progreso.Width = 1
+        Progreso.Visible = True
+        Progreso_Etiqueta.Text = "Procesando..."
+        Progreso_Etiqueta.Visible = True
+        Progreso_Fondo.Visible = True
+
+        Application.DoEvents()
+
+        'Start file analysis
+        For i As Integer = 0 To (List_Files.Length - 1)
+            'Read current file
+            Dim Stream As New IO.StreamReader(List_Files(i))
+            Dim CurrentLine As String
+
+            CurrentLine = Stream.ReadLine()
+            If Not (CurrentLine Is Nothing) Then
+                Dim Array_Line As String() = ParseLine(CurrentLine)
+
+                '----------------------------------------------------------------------------------
+                If Array_Line(0) = "Number" And (Array_Line.GetLength(0) = 493 Or
+                                                 Array_Line.GetLength(0) = 494 Or
+                                                 Array_Line.GetLength(0) = 591 Or
+                                                 Array_Line.GetLength(0) = 592) Then
+                    Do
+                        CurrentLine = Stream.ReadLine()
+                        If CurrentLine Is Nothing Then
+                            Exit Do
+                        End If
+
+                        Array_Line = ParseLine(CurrentLine)
+
+                        'Create user
+                        'Array_Line(0) = Array_Line(0).ToUpper()
+                        Dim UPos As Integer
+
+                        Dim Column As Integer = Grid.GetLength(0) - 1
+                        Dim Row As Integer = Grid.GetLength(1)
+
+                        ReDim Preserve Grid(Column, Row)
+                        UPos = Grid.GetLength(1) - 1
+
+                        'Registering Data
+                        'Location and Serial
+                        Dim Filename As String = FileIO.FileSystem.GetName(List_Files(i))
+                        Filename = Filename.Substring(0, Filename.Length - 4)
+
+                        Dim Array_FileInfo As String() = ParseLine(Filename)
+                        If Array_FileInfo.GetLength(0) = 2 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = Array_FileInfo(1)
+                        ElseIf Array_FileInfo.GetLength(0) = 1 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = "NULL"
+                        Else
+                            Grid(0, Row) = "NULL"
+                            Grid(1, Row) = "NULL"
+                        End If
+
+                        'User
+                        If Array_Line(1) = "" Then Continue Do
+                        Grid(2, Row) = Array_Line(1)
+
+                        'UserID
+                        Grid(3, Row) = Array_Line(2)
+
+                        'Copy Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(4, UPos))
+                            n += Convert.ToInt32(Array_Line(416))
+                            Grid(4, UPos) = n.ToString()
+                        End If
+
+                        'Copy Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(5, UPos))
+                            n += Convert.ToInt32(Array_Line(407))
+                            Grid(5, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(6, UPos))
+                            n += Convert.ToInt32(Array_Line(440))
+                            Grid(6, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(7, UPos))
+                            n += Convert.ToInt32(Array_Line(430))
+                            Grid(7, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(8, UPos))
+                            n += Convert.ToInt32(Array_Line(456))
+                            Grid(8, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(9, UPos))
+                            n += Convert.ToInt32(Array_Line(442))
+                            Grid(9, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(10, UPos))
+                            n += Convert.ToInt32(Array_Line(488))
+                            Grid(10, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(11, UPos))
+                            n += Convert.ToInt32(Array_Line(474))
+                            Grid(11, UPos) = n.ToString()
+                        End If
+                    Loop
+
+                    '------------------------------------------------------------------------------
+                ElseIf Array_Line(0) = "Nombre de Usuario" And (Array_Line.GetLength(0) = 61) Then
+                    Do
+                        CurrentLine = Stream.ReadLine()
+                        If CurrentLine Is Nothing Then
+                            Exit Do
+                        End If
+
+                        Array_Line = ParseLine(CurrentLine)
+
+                        'Create user
+                        'Array_Line(0) = Array_Line(0).ToUpper()
+                        Dim UPos As Integer
+
+                        Dim Column As Integer = Grid.GetLength(0) - 1
+                        Dim Row As Integer = Grid.GetLength(1)
+
+                        ReDim Preserve Grid(Column, Row)
+                        UPos = Grid.GetLength(1) - 1
+
+                        'Registering Data
+                        'Location and Serial
+                        Dim Filename As String = FileIO.FileSystem.GetName(List_Files(i))
+                        Filename = Filename.Substring(0, Filename.Length - 4)
+
+                        Dim Array_FileInfo As String() = ParseLine(Filename)
+                        If Array_FileInfo.GetLength(0) = 2 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = Array_FileInfo(1)
+                        ElseIf Array_FileInfo.GetLength(0) = 1 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = "NULL"
+                        Else
+                            Grid(0, Row) = "NULL"
+                            Grid(1, Row) = "NULL"
+                        End If
+
+                        'User
+                        Grid(2, Row) = Array_Line(0)
+
+                        'UserID
+                        Grid(3, Row) = "NULL"
+
+                        'Copy Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(4, UPos))
+                            n += Convert.ToInt32(Array_Line(4))
+
+                            'Save new value
+                            Grid(4, UPos) = n.ToString()
+                        End If
+
+                        'Copy Full Color Duplex
+                        If True Then
+                            Grid(5, UPos) = "0"
+                        End If
+
+                        'Copy Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(6, UPos))
+                            n += Convert.ToInt32(Array_Line(10))
+                            Grid(6, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Duplex
+                        If True Then
+                            Grid(7, UPos) = "0"
+                        End If
+
+                        'Printer Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(8, UPos))
+                            n += Convert.ToInt32(Array_Line(16))
+
+                            'Save new value
+                            Grid(8, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Duplex
+                        If True Then
+                            Grid(9, UPos) = "0"
+                        End If
+
+                        'Printer Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(10, UPos))
+                            n += Convert.ToInt32(Array_Line(13))
+
+                            'Save new value
+                            Grid(10, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Duplex
+                        If True Then
+                            Grid(11, UPos) = "0"
+                        End If
+                    Loop
+
+                    '------------------------------------------------------------------------------
+                ElseIf Array_Line(0) = "T450SY0U36A" And Array_Line.GetLength(0) = 454 Then
+                    Do
+                        CurrentLine = Stream.ReadLine()
+                        If CurrentLine Is Nothing Then Exit Do
+                        CurrentLine = Stream.ReadLine()
+                        If CurrentLine Is Nothing Then Exit Do
+
+                        Array_Line = ParseLine(CurrentLine)
+
+                        'Create user
+                        'Array_Line(0) = Array_Line(0).ToUpper()
+                        Dim UPos As Integer
+
+                        Dim Column As Integer = Grid.GetLength(0) - 1
+                        Dim Row As Integer = Grid.GetLength(1)
+
+                        ReDim Preserve Grid(Column, Row)
+                        UPos = Grid.GetLength(1) - 1
+
+                        'Registering Data
+                        'Location and Serial
+                        Dim Filename As String = FileIO.FileSystem.GetName(List_Files(i))
+                        Filename = Filename.Substring(0, Filename.Length - 4)
+
+                        Dim Array_FileInfo As String() = ParseLine(Filename)
+                        If Array_FileInfo.GetLength(0) = 2 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = Array_FileInfo(1)
+                        ElseIf Array_FileInfo.GetLength(0) = 1 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = "NULL"
+                        Else
+                            Grid(0, Row) = "NULL"
+                            Grid(1, Row) = "NULL"
+                        End If
+
+                        'User
+                        Grid(2, Row) = Array_Line(1)
+
+                        'UserID
+                        Grid(3, Row) = Array_Line(0)
+
+                        'Copy Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(4, UPos))
+                            n += Convert.ToInt32(Array_Line(378))
+                            Grid(4, UPos) = n.ToString()
+                        End If
+
+                        'Copy Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(5, UPos))
+                            n += Convert.ToInt32(Array_Line(368))
+                            Grid(5, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(6, UPos))
+                            n += Convert.ToInt32(Array_Line(402))
+                            Grid(6, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(7, UPos))
+                            n += Convert.ToInt32(Array_Line(392))
+                            Grid(7, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(8, UPos))
+                            n += Convert.ToInt32(Array_Line(418))
+                            Grid(8, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(9, UPos))
+                            n += Convert.ToInt32(Array_Line(404))
+                            Grid(9, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(10, UPos))
+                            n += Convert.ToInt32(Array_Line(450))
+                            Grid(10, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(11, UPos))
+                            n += Convert.ToInt32(Array_Line(436))
+                            Grid(11, UPos) = n.ToString()
+                        End If
+                    Loop
+
+                    '------------------------------------------------------------------------------
+                ElseIf Array_Line(0) = "Number" And Array_Line.GetLength(0) = 530 Then
+                    Do
+                        CurrentLine = Stream.ReadLine()
+                        If CurrentLine Is Nothing Then
+                            Exit Do
+                        End If
+
+                        Array_Line = ParseLine(CurrentLine)
+
+                        'Create user
+                        'Array_Line(0) = Array_Line(0).ToUpper()
+                        Dim UPos As Integer
+
+                        Dim Column As Integer = Grid.GetLength(0) - 1
+                        Dim Row As Integer = Grid.GetLength(1)
+
+                        ReDim Preserve Grid(Column, Row)
+                        UPos = Grid.GetLength(1) - 1
+
+                        'Registering Data
+                        'Location and Serial
+                        Dim Filename As String = FileIO.FileSystem.GetName(List_Files(i))
+                        Filename = Filename.Substring(0, Filename.Length - 4)
+
+                        Dim Array_FileInfo As String() = ParseLine(Filename)
+                        If Array_FileInfo.GetLength(0) = 2 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = Array_FileInfo(1)
+                        ElseIf Array_FileInfo.GetLength(0) = 1 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = "NULL"
+                        Else
+                            Grid(0, Row) = "NULL"
+                            Grid(1, Row) = "NULL"
+                        End If
+
+                        'User
+                        Grid(2, Row) = Array_Line(1)
+
+                        'UserID
+                        Grid(3, Row) = Array_Line(2)
+
+                        'Copy Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(4, UPos))
+                            n += Convert.ToInt32(Array_Line(452))
+                            Grid(4, UPos) = n.ToString()
+                        End If
+
+                        'Copy Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(5, UPos))
+                            n += Convert.ToInt32(Array_Line(442))
+                            Grid(5, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(6, UPos))
+                            n += Convert.ToInt32(Array_Line(476))
+                            Grid(6, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(7, UPos))
+                            n += Convert.ToInt32(Array_Line(466))
+                            Grid(7, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(8, UPos))
+                            n += Convert.ToInt32(Array_Line(492))
+                            Grid(8, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(9, UPos))
+                            n += Convert.ToInt32(Array_Line(478))
+                            Grid(9, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(10, UPos))
+                            n += Convert.ToInt32(Array_Line(524))
+                            Grid(10, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(11, UPos))
+                            n += Convert.ToInt32(Array_Line(510))
+                            Grid(11, UPos) = n.ToString()
+                        End If
+                    Loop
+                    '------------------------------------------------------------------------------
+                ElseIf Array_Line(0) = "Number" And (Array_Line.GetLength(0) = 935) Then
+                    Do
+                        CurrentLine = Stream.ReadLine()
+                        If CurrentLine Is Nothing Then
+                            Exit Do
+                        End If
+
+                        Array_Line = ParseLine(CurrentLine)
+
+                        'Create user
+                        'Array_Line(0) = Array_Line(0).ToUpper()
+                        Dim UPos As Integer
+
+                        Dim Column As Integer = Grid.GetLength(0) - 1
+                        Dim Row As Integer = Grid.GetLength(1)
+
+                        ReDim Preserve Grid(Column, Row)
+                        UPos = Grid.GetLength(1) - 1
+
+                        'Registering Data
+                        'Location and Serial
+                        Dim Filename As String = FileIO.FileSystem.GetName(List_Files(i))
+                        Filename = Filename.Substring(0, Filename.Length - 4)
+
+                        Dim Array_FileInfo As String() = ParseLine(Filename)
+                        If Array_FileInfo.GetLength(0) = 2 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = Array_FileInfo(1)
+                        ElseIf Array_FileInfo.GetLength(0) = 1 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = "NULL"
+                        Else
+                            Grid(0, Row) = "NULL"
+                            Grid(1, Row) = "NULL"
+                        End If
+
+                        'User
+                        Grid(2, Row) = Array_Line(1)
+
+                        'UserID
+                        Grid(3, Row) = Array_Line(2)
+
+                        'Copy Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(4, UPos))
+                            n += Convert.ToInt32(Array_Line(525))
+                            Grid(4, UPos) = n.ToString()
+                        End If
+
+                        'Copy Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(5, UPos))
+                            n += Convert.ToInt32(Array_Line(515))
+                            Grid(5, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(6, UPos))
+                            n += Convert.ToInt32(Array_Line(549))
+                            Grid(6, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(7, UPos))
+                            n += Convert.ToInt32(Array_Line(539))
+                            Grid(7, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(8, UPos))
+                            n += Convert.ToInt32(Array_Line(577))
+                            Grid(8, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(9, UPos))
+                            n += Convert.ToInt32(Array_Line(563))
+                            Grid(9, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(10, UPos))
+                            n += Convert.ToInt32(Array_Line(609))
+                            Grid(10, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(11, UPos))
+                            n += Convert.ToInt32(Array_Line(595))
+                            Grid(11, UPos) = n.ToString()
+                        End If
+                    Loop
+
+                    '------------------------------------------------------------------------------
+                ElseIf Array_Line(0) = "Number" And Array_Line.GetLength(0) = 602 Then
+                    Do
+                        CurrentLine = Stream.ReadLine()
+                        If CurrentLine Is Nothing Then
+                            Exit Do
+                        End If
+
+                        Array_Line = ParseLine(CurrentLine)
+
+                        'Create user
+                        'Array_Line(0) = Array_Line(0).ToUpper()
+                        Dim UPos As Integer
+
+                        Dim Column As Integer = Grid.GetLength(0) - 1
+                        Dim Row As Integer = Grid.GetLength(1)
+
+                        ReDim Preserve Grid(Column, Row)
+                        UPos = Grid.GetLength(1) - 1
+
+                        'Registering Data
+                        'Location and Serial
+                        Dim Filename As String = FileIO.FileSystem.GetName(List_Files(i))
+                        Filename = Filename.Substring(0, Filename.Length - 4)
+
+                        Dim Array_FileInfo As String() = ParseLine(Filename)
+                        If Array_FileInfo.GetLength(0) = 2 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = Array_FileInfo(1)
+                        ElseIf Array_FileInfo.GetLength(0) = 1 Then
+                            Grid(0, Row) = Array_FileInfo(0)
+                            Grid(1, Row) = "NULL"
+                        Else
+                            Grid(0, Row) = "NULL"
+                            Grid(1, Row) = "NULL"
+                        End If
+
+                        'User
+                        If Array_Line(1) = "" Then Continue Do
+                        Grid(2, Row) = Array_Line(1)
+
+                        'UserID
+                        Grid(3, Row) = Array_Line(2)
+
+                        'Copy Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(4, UPos))
+                            n += Convert.ToInt32(Array_Line(425))
+                            Grid(4, UPos) = n.ToString()
+                        End If
+
+                        'Copy Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(5, UPos))
+                            n += Convert.ToInt32(Array_Line(415))
+                            Grid(5, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(6, UPos))
+                            n += Convert.ToInt32(Array_Line(449))
+                            Grid(6, UPos) = n.ToString()
+                        End If
+
+                        'Copy Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(7, UPos))
+                            n += Convert.ToInt32(Array_Line(439))
+                            Grid(7, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(8, UPos))
+                            n += Convert.ToInt32(Array_Line(465))
+                            Grid(8, UPos) = n.ToString()
+                        End If
+
+                        'Printer Full Color Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(9, UPos))
+                            n += Convert.ToInt32(Array_Line(451))
+                            Grid(9, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Single
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(10, UPos))
+                            n += Convert.ToInt32(Array_Line(497))
+                            Grid(10, UPos) = n.ToString()
+                        End If
+
+                        'Printer Black Duplex
+                        If True Then
+                            Dim n As Integer
+
+                            n = Convert.ToInt32(Grid(11, UPos))
+                            n += Convert.ToInt32(Array_Line(483))
+                            Grid(11, UPos) = n.ToString()
+                        End If
+
+                    Loop
+
+
+
+
+                Else
+                    MsgBox("El archivo """ + FileIO.FileSystem.GetName(List_Files(i)) + ".csv "" no pudo ser analizado.")
+                    'MsgBox(Array_Line.GetLength(0))
+
+                End If
+            End If
+
+            Stream.Close()
+
+            'Refresh the progress bar
+            Progreso.Width = Progreso_Fondo.Width * (i + 1) / List_Files.Length
+            Application.DoEvents()
+        Next
+
+        If True Then
+            Dim Column As Integer = Grid.GetLength(0) - 1
+            Dim Row As Integer = Grid.GetLength(1) + 1
+
+            ReDim Preserve Grid(Column, Row)
+
+            Grid(2, Row) = "Total"
+
+            Dim Total_Values(10) As Integer
+            Dim Total As Double = 0
+            For r As Integer = 1 To Row - 2
+                'Column adding
+                For c As Integer = 4 To 11
+                    Total_Values(c - 3) += Convert.ToInt32(Grid(c, r))
+                Next
+
+            Next
+
+            For c As Integer = 4 To 11
+                Grid(c, Row) = Total_Values(c - 3).ToString
+            Next
+
+            'Grid(12, Row) = """" + Total.ToString + """"
+        End If
+
+
+        'Save file
+        SaveFileDialog.Filter = "Archivos CSV (*.csv)|*.csv"
+        SaveFileDialog.ShowDialog()
+
+        If SaveFileDialog.FileName = "" Then
+            'End progress bar
+            Progreso.Width = 1
+            Progreso.Visible = False
+            Progreso_Etiqueta.Text = "Completado..."
+            Progreso_Fondo.Visible = False
+
+            Exit Sub
+        End If
+
+        Try
+            Dim Output As New IO.StreamWriter(SaveFileDialog.FileName)
+            Dim Line As String
+
+            For Row As Integer = 0 To Grid.GetLength(1) - 1
+                Line = ""
+
+                For Column As Integer = 0 To Grid.GetLength(0) - 2
+                    Line += Grid(Column, Row) + ";"
+                Next
+                Line += Grid(Grid.GetLength(0) - 1, Row)
+
+                Output.WriteLine(Line)
+            Next
+
+            Output.Close()
+
+            'End progress bar
+            Progreso.Width = 1
+            Progreso.Visible = False
+            Progreso_Etiqueta.Text = "Completado..."
+            Progreso_Fondo.Visible = False
+        Catch ex As Exception
+            MsgBox("Este archivo lo esta utilizando otro programa. Por favor escoja otro nombre.")
+
+            'End progress bar
+            Progreso.Width = 1
+            Progreso.Visible = False
+            Progreso_Etiqueta.Text = ""
+            Progreso_Fondo.Visible = False
+        End Try
     End Sub
 End Class

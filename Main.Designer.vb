@@ -58,6 +58,7 @@ Partial Class Main
         Me.AnalizarContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AnalisisSharpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog = New System.Windows.Forms.OpenFileDialog()
+        Me.AnálisisMultipleColumnaUnicaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AnalizarContextMenu.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -445,17 +446,23 @@ Partial Class Main
         '
         Me.AnalizarContextMenu.BackColor = System.Drawing.Color.White
         Me.AnalizarContextMenu.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AnalizarContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AnalisisSharpToolStripMenuItem})
+        Me.AnalizarContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AnalisisSharpToolStripMenuItem, Me.AnálisisMultipleColumnaUnicaToolStripMenuItem})
         Me.AnalizarContextMenu.Name = "AnalizarContextMenu"
         Me.AnalizarContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.AnalizarContextMenu.ShowImageMargin = False
-        Me.AnalizarContextMenu.Size = New System.Drawing.Size(192, 26)
+        Me.AnalizarContextMenu.Size = New System.Drawing.Size(246, 70)
         '
         'AnalisisSharpToolStripMenuItem
         '
         Me.AnalisisSharpToolStripMenuItem.Name = "AnalisisSharpToolStripMenuItem"
-        Me.AnalisisSharpToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.AnalisisSharpToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
         Me.AnalisisSharpToolStripMenuItem.Text = "Análisis Individual Sharp"
+        '
+        'AnálisisMultipleColumnaUnicaToolStripMenuItem
+        '
+        Me.AnálisisMultipleColumnaUnicaToolStripMenuItem.Name = "AnálisisMultipleColumnaUnicaToolStripMenuItem"
+        Me.AnálisisMultipleColumnaUnicaToolStripMenuItem.Size = New System.Drawing.Size(245, 22)
+        Me.AnálisisMultipleColumnaUnicaToolStripMenuItem.Text = "Análisis Múltiple - Columna Única"
         '
         'Main
         '
@@ -538,4 +545,5 @@ Partial Class Main
     Friend WithEvents AnalizarContextMenu As ContextMenuStrip
     Friend WithEvents AnalisisSharpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenFileDialog As OpenFileDialog
+    Friend WithEvents AnálisisMultipleColumnaUnicaToolStripMenuItem As ToolStripMenuItem
 End Class

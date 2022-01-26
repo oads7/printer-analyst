@@ -1,0 +1,12 @@
+C:\Users\Alejandro\Desktop\Printer Analyst\bin\Release\Printer Analyst.exe
+C:\Users\Alejandro\Desktop\Printer Analyst\bin\Release\Printer Analyst.pdb
+C:\Users\Alejandro\Desktop\Printer Analyst\bin\Release\Printer Analyst.xml
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer_Analyst.DataRange.resources
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer_Analyst.Main.resources
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer_Analyst.Resources.resources
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer Analyst.vbproj.GenerateResource.cache
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer Analyst.vbproj.CoreCompileInputs.cache
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer Analyst.exe
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer Analyst.xml
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer Analyst.pdb
+C:\Users\Alejandro\Desktop\Printer Analyst\obj\Release\Printer Analyst.vbproj.AssemblyReference.cache
